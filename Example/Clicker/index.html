@@ -1,1 +1,187 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clicker</title>
+
+<style>
+:root {
+    color-scheme: dark;
+    --background: #10131a;
+    --surface: #191f2b;
+    --primary: #8ab4ff;
+    --text: #f4f6fc;
+    --muted: #9da9bd;
+    --spring-smooth: cubic-bezier(.22, 1, .36, 1);
+    --spring-bounce: cubic-bezier(.34, 1.56, .64, 1);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: var(--background);
+    color: var(--text);
+    font-family: Arial, sans-serif;
+}
+
+.app {
+    width: 100%;
+    max-width: 380px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+}
+
+.balance {
+    font-size: 14px;
+    color: var(--muted);
+}
+
+.counter {
+    padding: 32px 20px;
+    text-align: center;
+    background: var(--surface);
+    border-radius: 28px;
+}
+
+.score {
+    font-size: clamp(42px, 12vw, 64px);
+    font-weight: 700;
+    letter-spacing: -3px;
+    font-variant-numeric: tabular-nums;
+    transition: transform 180ms var(--spring-smooth);
+}
+
+.score.changed {
+    transform: scale(1.08);
+}
+
+.label {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.click-button {
+    width: 100%;
+    min-height: 180px;
+    border: none;
+    outline: none;
+    border-radius: 28px;
+    background: var(--primary);
+    color: #10213c;
+    font-size: 24px;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        transform 240ms var(--spring-bounce),
+        background 180ms var(--spring-smooth);
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.click-button:active {
+    transform: scale(.94);
+    background: #a8c8ff;
+}
+
+.click-button.pressed {
+    animation: press 360ms var(--spring-bounce);
+}
+
+@keyframes press {
+    0% {
+        transform: scale(.94);
+    }
+    65% {
+        transform: scale(1.045);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+    }
+}
+</style>
+</head>
+
+<body>
+<main class="app">
+
+    <header class="header">
+        <div class="title">Clicker</div>
+        <div class="balance" id="balance">0 points</div>
+    </header>
+
+    <section class="counter">
+        <div class="score" id="score">0</div>
+        <div class="label">Total Points</div>
+    </section>
+
+    <button class="click-button" id="clickButton">
+        Click
+    </button>
+
+</main>
+
+<script>
+const scoreElement = document.getElementById("score");
+const balanceElement = document.getElementById("balance");
+const clickButton = document.getElementById("clickButton");
+
+let points = 0;
+
+function updateDisplay() {
+    scoreElement.textContent = points.toLocaleString("en-US");
+    balanceElement.textContent =
+        points.toLocaleString("en-US") + " points";
+}
+
+function click() {
+    points += 1;
+
+    scoreElement.classList.remove("changed");
+    void scoreElement.offsetWidth;
+    scoreElement.classList.add("changed");
+
+    clickButton.classList.remove("pressed");
+    void clickButton.offsetWidth;
+    clickButton.classList.add("pressed");
+
+    updateDisplay();
+}
+
+clickButton.addEventListener("click", click);
+
+updateDisplay();
+</script>
+</body>
+  </html>
