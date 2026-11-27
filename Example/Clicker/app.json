@@ -6,6 +6,6 @@
   "version": "1.0.0Test",
   "notes": "Shit",
   "platform": ["desktop", "mobile"],
-  "icon": "icon.svg",
+  "icon": "icon.jpg",
   "entry": "index.html"
 }
